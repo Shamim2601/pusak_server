@@ -21,4 +21,9 @@ const server = app.listen(port, () => {
     console.log(`Server listening on port ${port}...`);
 });
 
+process.on('unhandledRejection', (err) => {
+    console.error('Unhandled Rejection:', err);
+    server.close(() => process.exit(1));
+});
+
 module.exports = { app, server }; // Export both the app and the server
