@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-// const routes = require('./routes'); // Import the routes
+const routes = require('./routes'); // Import the routes
 
 const app = express();
 
@@ -9,12 +9,7 @@ app.use(cors());
 app.use(express.json()); // to access req.body and get json data
 
 // Use the routes defined in routes.js
-// app.use('/', routes);
-
-// Health check
-app.get('/', (req, res) => {
-    res.send('Server is running');
-});
+app.use('/', routes);
 
 const port = 5000;
 const server = app.listen(port, () => {
