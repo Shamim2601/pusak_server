@@ -1,7 +1,6 @@
-const { Pool } = require('pg');
+const { createPool } = require('@vercel/postgres');
 
-// Directly use the connection string
-const pool = new Pool({
+const pool = createPool({
   connectionString: 'postgres://default:YJu1khP0KqmS@ep-old-dust-a4tavg32-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require',
 });
 
@@ -14,4 +13,6 @@ pool.on('error', (err) => {
   process.exit(-1);
 });
 
-module.exports = pool;
+module.exports = {
+  query: (text, params) => pool.query(text, params),
+};
