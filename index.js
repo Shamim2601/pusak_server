@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const pool = require('./db'); // Import the pool from the db.js file
 const routes = require('./routes'); // Import the routes
 
 const app = express();
