@@ -4,7 +4,7 @@ const pool = require('./db'); // Import the pool from the db.js file
 const router = express.Router();
 
 // Health check
-router.get('/health', (req, res) => {
+router.get('/', (req, res) => {
     res.send('Server is running');
 });
 
