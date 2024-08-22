@@ -27,7 +27,7 @@ router.post('/todos', async (req, res) => {
 // READ ALL
 router.get('/todos', async (req, res) => {
     try {
-        const allTodo = await pool.query("SELECT * FROM todo;");
+        const allTodo = await pool.query("SELECT * FROM todo ORDER BY id DESC;");
         res.json(allTodo.rows);
     } catch (error) {
         console.error('Error executing query:', error.message);
