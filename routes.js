@@ -14,10 +14,10 @@ router.get('/', (req, res) => {
 // CREATE a member
 router.post('/members', async (req, res) => {
     try {
-        const { name, university, subject, hall, hsc_batch, union_pourasava, email, phone, fb_profile, blood_group, level } = req.body;
+        const { name, university, subject, hall, hsc_batch, union_pourasava, email, phone, fb_profile, blood_group } = req.body;
         const newMember = await pool.query(
             "INSERT INTO Member (name, university, subject, hall, hsc_batch, union_pourasava, email, phone, fb_profile, blood_group, level) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *;",
-            [name, university, subject, hall, hsc_batch, union_pourasava, email, phone, fb_profile, blood_group, level]
+            [name, university, subject, hall, hsc_batch, union_pourasava, email, phone, fb_profile, blood_group, 1]
         );
 
         res.json(newMember.rows[0]);
