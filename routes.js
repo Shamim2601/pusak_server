@@ -8,6 +8,95 @@ router.get('/', (req, res) => {
     res.send('Server is running');
 });
 
+
+///////   MEMBERS ROUTES    ///////
+
+// CREATE a member
+router.post('/members', async (req, res) => {
+    try {
+        const { name, university, subject, hall, hsc_batch, union_pourasava, email, phone, fb_profile, blood_group, level } = req.body;
+        const newMember = await pool.query(
+            "INSERT INTO Member (name, university, subject, hall, hsc_batch, union_pourasava, email, phone, fb_profile, blood_group, level) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *;",
+            [name, university, subject, hall, hsc_batch, union_pourasava, email, phone, fb_profile, blood_group, level]
+        );
+
+        res.json(newMember.rows[0]);
+    } catch (error) {
+        console.error('Error executing query:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// READ ALL members
+router.get('/members', async (req, res) => {
+    try {
+        const allMembers = await pool.query("SELECT * FROM Member ORDER BY id ASC;");
+        res.json(allMembers.rows);
+    } catch (error) {
+        console.error('Error executing query:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// READ ONE member
+router.get('/members/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const member = await pool.query("SELECT * FROM Member WHERE id = $1;", [id]);
+
+        if (member.rows.length === 0) {
+            return res.status(404).json({ error: 'Member not found' });
+        }
+
+        res.json(member.rows[0]);
+    } catch (error) {
+        console.error('Error executing query:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// UPDATE a member
+router.put('/members/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, university, subject, hall, hsc_batch, union_pourasava, email, phone, fb_profile, blood_group, level } = req.body;
+        const updatedMember = await pool.query(
+            "UPDATE Member SET name = $1, university = $2, subject = $3, hall = $4, hsc_batch = $5, union_pourasava = $6, email = $7, phone = $8, fb_profile = $9, blood_group = $10, level = $11 WHERE id = $12 RETURNING *;",
+            [name, university, subject, hall, hsc_batch, union_pourasava, email, phone, fb_profile, blood_group, level, id]
+        );
+
+        if (updatedMember.rows.length === 0) {
+            return res.status(404).json({ error: 'Member not found' });
+        }
+
+        res.json(updatedMember.rows[0]);
+    } catch (error) {
+        console.error('Error executing query:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// DELETE a member
+router.delete('/members/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedMember = await pool.query("DELETE FROM Member WHERE id = $1 RETURNING *;", [id]);
+
+        if (deletedMember.rows.length === 0) {
+            return res.status(404).json({ error: 'Member not found' });
+        }
+
+        res.json(deletedMember.rows[0]);
+    } catch (error) {
+        console.error('Error executing query:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+
+///////    EVENTS ROUTES   ///////
+
 // CREATE
 router.post('/todos', async (req, res) => {
     try {
